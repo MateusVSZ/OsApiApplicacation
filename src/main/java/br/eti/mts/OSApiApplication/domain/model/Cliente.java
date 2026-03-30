@@ -4,27 +4,40 @@
  */
 package br.eti.mts.OSApiApplication.domain.model;
 
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 /**
  *
  * @author digma
  */
+@Entity
 public class Cliente {
 
-private long id;
-private String name;
-private String email;
-private String fone;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    private String nome;
+    private String email;
+
+    @Column(name = "telefone")
+    private String fone;
 
     public Cliente() {
     }
 
-public Cliente(long id, String name, String email, String fone){
+    public Cliente(long id, String nome, String email, String fone) {
         this.id = id;
-        this.name = name;
+        this.nome = nome;
         this.email = email;
         this.fone = fone;
     }
-
+    
+    
         
 
     @Override
@@ -60,11 +73,11 @@ public Cliente(long id, String name, String email, String fone){
     }
 
     public String getName() {
-        return name;
+        return nome;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.nome = name;
     }
 
     public String getEmail() {
