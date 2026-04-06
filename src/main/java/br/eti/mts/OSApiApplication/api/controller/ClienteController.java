@@ -6,6 +6,7 @@ package br.eti.mts.OSApiApplication.api.controller;
 
 import br.eti.mts.OSApiApplication.domain.model.Cliente;
 import br.eti.mts.OSApiApplication.domain.repository.ClienteRepository;
+import br.eti.mts.OSApiApplication.domain.service.ClienteService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.Valid;
@@ -32,14 +33,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class ClienteController {
 
     @Autowired
-    ClienteRepository clienteRepository;
+    private ClienteRepository clienteRepository;
+    
+    @Autowired
+    private ClienteService clienteService;
 
     List<Cliente> listaClientes; //criei um objeto
 
     @GetMapping("/clientes")
     public List<Cliente> listas() { //aqui criei um método que retorna lista<Cliente>
 
-        return clienteRepository.findAll(); // é tudo
+        return clienteService.findAll(); // é tudo
 
     }
 
@@ -59,7 +63,7 @@ public class ClienteController {
     @PostMapping("/clientes")
     @ResponseStatus(HttpStatus.CREATED)
     public Cliente adicionar(@Valid @RequestBody Cliente cliente) {
-        return clienteRepository.save(cliente);
+        return clienteService.salvar(cliente);
 
     }
 
@@ -71,8 +75,8 @@ public class ClienteController {
             return ResponseEntity.notFound().build();
 
         }
-        cliente.setId(clienteID); // set altera o id do parametro(clienteID)
-        cliente = clienteRepository.save(cliente);//aqui salva
+        cliente.setId(clienteID); // atualiza o id que ja existe e nao cria um novo
+        cliente = clienteService.salvar(cliente);//aqui salva
         return ResponseEntity.ok(cliente);//aqui retorna
     }
 }
