@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     List<Cliente> findByNome(String nome);
     List<Cliente> findByNomeContaining(String nome);
-    List<Cliente> findByEmail(String email);
+    Cliente findByEmail(String email);
     
     
 }
