@@ -4,9 +4,12 @@
  */
 package br.eti.mts.OSApiApplication.domain.repository;
 
+
 import br.eti.mts.OSApiApplication.domain.model.Cliente;
 import br.eti.mts.OSApiApplication.domain.model.OrdemServico;
 import java.util.List;
+
+import br.eti.mts.OSApiApplication.domain.model.OrdemServico;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -14,6 +17,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author digma
  */
 public interface OrdemServicoRepository extends JpaRepository<OrdemServico, Long>{
-    
-   public List<OrdemServico> findByCliente(Cliente cliente);
+    public List<OrdemServico> findByCliente(Cliente cliente);
+
 }

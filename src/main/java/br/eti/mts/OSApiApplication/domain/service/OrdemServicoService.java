@@ -4,12 +4,14 @@
  */
 package br.eti.mts.OSApiApplication.domain.service;
 
+
 import br.eti.mts.OSApiApplication.domain.exception.DomainException;
 import br.eti.mts.OSApiApplication.domain.model.OrdemServico;
 import br.eti.mts.OSApiApplication.domain.model.StatusOrdemServico;
 import br.eti.mts.OSApiApplication.domain.repository.OrdemServicoRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class OrdemServicoService {
+
 
     @Autowired
     private OrdemServicoRepository ordemServicoRepository;
@@ -57,6 +60,7 @@ public class OrdemServicoService {
                 ordemServico.setStatus(status);
                 ordemServico.setDataFinalizacao(LocalDateTime.now());
                 ordemServicoRepository.save(ordemServico);
+                return Optional.of(ordemServico);
             } else {
 
                 //ops..ordem FINALIZADA ou CANCELADA. Não alterar.
@@ -65,13 +69,9 @@ public class OrdemServicoService {
 
         } else {
             //Lança exception se Id não for encontrado.
-        }
             throw new DomainException("Não existe OS com o Id" + ordemServicoID);
 
         }
     }
-
-
-
-
+}
 

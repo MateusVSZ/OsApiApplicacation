@@ -4,18 +4,26 @@
  */
 package br.eti.mts.OSApiApplication.api.controller;
 
+
 import br.eti.mts.OSApiApplication.domain.model.Cliente;
 import br.eti.mts.OSApiApplication.domain.model.OrdemServico;
 import br.eti.mts.OSApiApplication.domain.repository.ClienteRepository;
 import br.eti.mts.OSApiApplication.domain.repository.OrdemServicoRepository;
 import br.eti.mts.OSApiApplication.domain.service.OrdemServicoService;
 import jakarta.persistence.Id;
+
+import br.eti.mts.OSApiApplication.domain.model.OrdemServico;
+import br.eti.mts.OSApiApplication.domain.repository.OrdemServicoRepository;
+import br.eti.mts.OSApiApplication.domain.service.OrdemServicoService;
+
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,8 +46,10 @@ public class OrdemServicoController {
     private OrdemServicoService ordemServicoService;
     @Autowired
     private OrdemServicoRepository ordemServicoRepository;
+
     @Autowired
     private ClienteRepository clienteRepository;
+
 
     @GetMapping
     public List<OrdemServico> findAll() {
@@ -47,7 +57,9 @@ public class OrdemServicoController {
     }
 
     @GetMapping("/{clienteId}")
+
     public ResponseEntity<OrdemServico> busca(@PathVariable Long clienteId) {
+
         Optional<OrdemServico> cliente = ordemServicoRepository.findById(clienteId);
         if (cliente.isPresent()) {
             return ResponseEntity.ok(cliente.get());
@@ -55,6 +67,7 @@ public class OrdemServicoController {
         } else {
             return ResponseEntity.notFound().build();
         }
+
 
     }
 
@@ -64,6 +77,7 @@ public class OrdemServicoController {
         List<OrdemServico> listaOs = ordemServicoRepository.findByCliente(cliente.get());
         return listaOs;
 
+
     }
 
     @PostMapping
@@ -72,6 +86,7 @@ public class OrdemServicoController {
         return ordemServicoService.criar(ordemServico);
 
     }
+
 
     @PutMapping("/{ordemServicoID}")
     public ResponseEntity<OrdemServico> atualizar(@RequestBody OrdemServico ordemServico, @PathVariable Long ordemServicoID) {
@@ -99,4 +114,13 @@ public class OrdemServicoController {
 
     }
 
+  
+   
+    
+
+    
+    
 }
+
+
+
