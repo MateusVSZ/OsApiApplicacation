@@ -4,7 +4,7 @@
  */
 package br.eti.mts.OSApiApplication.api.controller;
 
-
+import br.eti.mts.OSApiApplication.domain.dto.AtualizaStatusDTO;
 import br.eti.mts.OSApiApplication.domain.model.Cliente;
 import br.eti.mts.OSApiApplication.domain.model.OrdemServico;
 import br.eti.mts.OSApiApplication.domain.repository.ClienteRepository;
@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import br.eti.mts.OSApiApplication.domain.model.OrdemServico;
 import br.eti.mts.OSApiApplication.domain.repository.OrdemServicoRepository;
 import br.eti.mts.OSApiApplication.domain.service.OrdemServicoService;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,7 +51,6 @@ public class OrdemServicoController {
     @Autowired
     private ClienteRepository clienteRepository;
 
-
     @GetMapping
     public List<OrdemServico> findAll() {
         return ordemServicoService.findAll();
@@ -68,7 +68,6 @@ public class OrdemServicoController {
             return ResponseEntity.notFound().build();
         }
 
-
     }
 
     @GetMapping("/clientes/{clienteId}")
@@ -76,7 +75,6 @@ public class OrdemServicoController {
         Optional<Cliente> cliente = clienteRepository.findById(clienteId);
         List<OrdemServico> listaOs = ordemServicoRepository.findByCliente(cliente.get());
         return listaOs;
-
 
     }
 
@@ -86,7 +84,6 @@ public class OrdemServicoController {
         return ordemServicoService.criar(ordemServico);
 
     }
-
 
     @PutMapping("/{ordemServicoID}")
     public ResponseEntity<OrdemServico> atualizar(@RequestBody OrdemServico ordemServico, @PathVariable Long ordemServicoID) {
@@ -99,7 +96,20 @@ public class OrdemServicoController {
         return ResponseEntity.ok(ordemServico);
 
     }
-   
+
+    @PutMapping("/atualiza-status/{ordemServicoID}")
+    public ResponseEntity<OrdemServico> atualizaStatus(
+            @PathVariable Long ordemServicoID,
+            @Valid @RequestBody AtualizaStatusDTO statusDTO) {
+
+        Optional<OrdemServico> optOS = ordemServicoService.atualizaStatus(ordemServicoID, statusDTO.status());
+
+        if (optOS.isPresent()) {
+            return ResponseEntity.ok(optOS.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @DeleteMapping("/{ordemServicoID}")
     public void delete(@RequestBody OrdemServico ordemServico, @PathVariable Long ordemServicoID) {
@@ -114,13 +124,4 @@ public class OrdemServicoController {
 
     }
 
-  
-   
-    
-
-    
-    
 }
-
-
-

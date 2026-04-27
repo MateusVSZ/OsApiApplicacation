@@ -4,7 +4,6 @@
  */
 package br.eti.mts.OSApiApplication.domain.service;
 
-
 import br.eti.mts.OSApiApplication.domain.exception.DomainException;
 import br.eti.mts.OSApiApplication.domain.model.OrdemServico;
 import br.eti.mts.OSApiApplication.domain.model.StatusOrdemServico;
@@ -23,11 +22,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrdemServicoService {
 
-
     @Autowired
     private OrdemServicoRepository ordemServicoRepository;
-    
- 
 
     public OrdemServico criar(OrdemServico ordemServico) {
         ordemServico.setStatus(StatusOrdemServico.ABERTA); //Aqui ele guarda o status ABERTA no meu objeto ordemServico
@@ -50,28 +46,23 @@ public class OrdemServicoService {
 
     public Optional<OrdemServico> atualizaStatus(Long ordemServicoID, StatusOrdemServico status) {
         Optional<OrdemServico> optOrdemServico = ordemServicoRepository.findById(ordemServicoID);
-        if (optOrdemServico.isPresent()) {
-
-            OrdemServico ordemServico = optOrdemServico.get();
-
-            //Verifica se a ordem está ABERTA.
-            if (ordemServico.getStatus() == StatusOrdemServico.ABERTA
-                    && status != StatusOrdemServico.ABERTA) {
-                ordemServico.setStatus(status);
-                ordemServico.setDataFinalizacao(LocalDateTime.now());
-                ordemServicoRepository.save(ordemServico);
-                return Optional.of(ordemServico);
-            } else {
-
-                //ops..ordem FINALIZADA ou CANCELADA. Não alterar.
-                return Optional.empty();
-            }
-
-        } else {
-            //Lança exception se Id não for encontrado.
+        if (!optOrdemServico.isPresent()) {
             throw new DomainException("Não existe OS com o Id" + ordemServicoID);
-
         }
+
+        OrdemServico ordemServico = optOrdemServico.get();
+
+        //Verifica se a ordem está ABERTA.
+        if (ordemServico.getStatus() == StatusOrdemServico.ABERTA
+                && status != StatusOrdemServico.ABERTA) {
+            ordemServico.setStatus(status);
+            ordemServico.setDataFinalizacao(LocalDateTime.now());
+            return Optional.of(ordemServicoRepository.save(ordemServico));
+        } else {
+
+            //ops..ordem FINALIZADA ou CANCELADA. Não alterar.
+            return Optional.empty();
+        }
+
     }
 }
-
