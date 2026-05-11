@@ -4,6 +4,8 @@
  */
 package br.eti.mts.OSApiApplication.domain.model;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -11,8 +13,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -37,11 +42,27 @@ public class OrdemServico {
     
     private LocalDateTime dataAbertura;
     private LocalDateTime dataFinalizacao;
+    
+    @OneToOne
+    private Comentario comentario;
 
+
+    @OneToMany(mappedBy = "ordemServico", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comentario> listaComentarios;
+
+
+    
+    public List<Comentario> getListaComentarios(){ 
+        return listaComentarios;
+    }
+    public void setListaComentarios(List<Comentario> listaComentarios){
+     this.listaComentarios = listaComentarios;   
+    }
     public OrdemServico() {
     }
 
-    public OrdemServico(Cliente cliente, String descricao, BigDecimal preco) {
+    public OrdemServico(Cliente cliente, String descricao, BigDecimal preco , Comentario comentario) {
+        this.comentario = comentario;
         this.cliente = cliente;
         this.descricao = descricao;
         this.preco = preco;
@@ -123,6 +144,13 @@ public class OrdemServico {
 
     public void setDataFinalizacao(LocalDateTime dataFinalizacao) {
         this.dataFinalizacao = dataFinalizacao;
+    }
+    public Comentario getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(Comentario comentario) {
+        this.comentario = comentario;
     }
     
     

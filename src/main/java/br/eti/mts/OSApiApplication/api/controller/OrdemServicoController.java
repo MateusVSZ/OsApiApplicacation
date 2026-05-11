@@ -6,6 +6,7 @@ package br.eti.mts.OSApiApplication.api.controller;
 
 import br.eti.mts.OSApiApplication.domain.dto.AtualizaStatusDTO;
 import br.eti.mts.OSApiApplication.domain.model.Cliente;
+import br.eti.mts.OSApiApplication.domain.model.Comentario;
 import br.eti.mts.OSApiApplication.domain.model.OrdemServico;
 import br.eti.mts.OSApiApplication.domain.repository.ClienteRepository;
 import br.eti.mts.OSApiApplication.domain.repository.OrdemServicoRepository;
@@ -13,7 +14,9 @@ import br.eti.mts.OSApiApplication.domain.service.OrdemServicoService;
 import jakarta.persistence.Id;
 
 import br.eti.mts.OSApiApplication.domain.model.OrdemServico;
+import br.eti.mts.OSApiApplication.domain.repository.ComentarioRepository;
 import br.eti.mts.OSApiApplication.domain.repository.OrdemServicoRepository;
+import br.eti.mts.OSApiApplication.domain.service.ComentarioService;
 import br.eti.mts.OSApiApplication.domain.service.OrdemServicoService;
 import jakarta.validation.Valid;
 
@@ -50,14 +53,32 @@ public class OrdemServicoController {
 
     @Autowired
     private ClienteRepository clienteRepository;
-
+ 
+    @Autowired
+    private ComentarioRepository comentarioRepository;
+    
+    @Autowired
+    private ComentarioService comentarioService;
+  
+    /**
+     * Retorna todas as OS
+     * Com Cliente
+     * Com Comentarios
+     * @return 
+     */
     @GetMapping
     public List<OrdemServico> findAll() {
         return ordemServicoService.findAll();
     }
 
-    @GetMapping("/{clienteId}")
-
+    
+    /**
+     * Retorna todas as OS POR Cliente
+     * 
+     * @param clienteId
+     * @return 
+     */
+    @GetMapping("/{clienteId}") //ordem de serviço por Id
     public ResponseEntity<OrdemServico> busca(@PathVariable Long clienteId) {
 
         Optional<OrdemServico> cliente = ordemServicoRepository.findById(clienteId);
@@ -70,7 +91,7 @@ public class OrdemServicoController {
 
     }
 
-    @GetMapping("/clientes/{clienteId}")
+    @GetMapping("/clientes/{clienteId}") //busca todas as ordens de servico por clienteId
     public List<OrdemServico> buscaOS(@PathVariable Long clienteId) {
         Optional<Cliente> cliente = clienteRepository.findById(clienteId);
         List<OrdemServico> listaOs = ordemServicoRepository.findByCliente(cliente.get());
@@ -78,12 +99,16 @@ public class OrdemServicoController {
 
     }
 
+   
+    
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public OrdemServico criar(@RequestBody OrdemServico ordemServico) {
         return ordemServicoService.criar(ordemServico);
 
     }
+    
 
     @PutMapping("/{ordemServicoID}")
     public ResponseEntity<OrdemServico> atualizar(@RequestBody OrdemServico ordemServico, @PathVariable Long ordemServicoID) {
@@ -112,8 +137,9 @@ public class OrdemServicoController {
     }
 
     @DeleteMapping("/{ordemServicoID}")
-    public void delete(@RequestBody OrdemServico ordemServico, @PathVariable Long ordemServicoID) {
+    public void delete(@RequestBody OrdemServico ordemServico, @PathVariable Long ordemServicoID, Long comentarioId) {
         if (ordemServicoRepository.existsById(ordemServicoID)) {
+            comentarioService.excluir(comentarioId);
             ordemServicoService.delete(ordemServicoID);
             ResponseEntity.ok();
 
@@ -121,7 +147,6 @@ public class OrdemServicoController {
 
             ResponseEntity.notFound();
         }
-
     }
 
 }
