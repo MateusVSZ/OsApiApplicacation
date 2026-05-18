@@ -1,42 +1,109 @@
 # Ordem de Serviço API
 
-VocÃª foi recrutado pela equipe de TI para desenvolver o sistema de Ordem de ServiÃ§o para uma AssistÃªncia TÃ©cnica de Notebooks e equipamentos de InformÃ¡tica em geral. A sua responsabilidade Ã© preparar o BackEnd utilizando framework de mercado e as boas prÃ¡ticas de programaÃ§Ã£o, inclusive clean code.
+Você foi recrutado pela equipe de TI para desenvolver o sistema de Ordem de Serviço para uma Assistência Técnica de Notebooks e equipamentos de informática em geral.
 
-Em entrevista com o P.O., foi explicado o funcionamento esperado do sistema. Todo equipamento que chega deve receber uma Ordem de ServiÃ§o (chamada a partir daqui de OS - "Ã³-esse"). Essa OS deve ter os dados do cliente (Nome, Telefone e Email), a descriÃ§Ã£o do serviÃ§o e o valor. A OS Ã© cadastrada no sistema com o status de aberta e deve ser marcado a data e hora que foi cadastrada.
+A sua responsabilidade é preparar o Back-End utilizando frameworks de mercado e as boas práticas de programação, incluindo Clean Code.
 
-Quando existir alguma anotaÃ§Ã£o referente a OS, como p.exemplo "Solicitado compra da tela para substituiÃ§Ã£o" deve-se anexar essa mensagem a OS, identificando a mensagem e a data e hora.
+## Regras de Negócio
 
-Quando o equipamento ficar pronto a OS receberÃ¡ o status de FINALIZADA. DeverÃ¡ ser marcado a data e hora do fechamento.
+Em entrevista com o Product Owner (P.O.), foi explicado o funcionamento esperado do sistema.
 
-Caso o cliente opte por nÃ£o realizar o serviÃ§o, a OS deve ser marcada como CANCELADA e tambÃ©m deverÃ¡ ser registrado a data e hora do cancelamento.
+Todo equipamento que chega à assistência deve receber uma Ordem de Serviço (OS).
 
-A AAPI deve ser capaz de:
+Essa OS deve conter os seguintes dados do cliente:
 
-Clientes
--CRUD
--Listar todos clientes
--Listar cliente por ID
--Listar cliente por email
--Listar cliente por telefone
+* Nome
+* Telefone
+* Email
 
+Além disso, a OS deve possuir:
 
-OrdemServico
--CRUD
--Listar uma OS por ID
--Listar todas OS por ID cliente
+* Descrição do serviço
+* Valor do serviço
+* Status da OS
+* Data e hora de cadastro
 
+Ao ser criada, a OS deve iniciar com o status:
 
-Comentarios
--CRUD
--Listar comentÃ¡rio por ID
--Listar comentÃ¡rios por OS
+* `ABERTA`
 
+Também deve ser registrada automaticamente a data e hora da criação da OS.
 
-## Desafio
+---
 
-Implemente as seguintes funcionalidades
--Listar todas OS aberta por ID cliente
--Listar todas OS fechada por ID cliente
--Listar todas OS Com e Sem ComentÃ¡rios
--Listar todas OS abertas Com e Sem ComentÃ¡rios
--Listar todas OS fechadas Com e Sem ComentÃ¡rios
+## Comentários da OS
+
+Quando existir alguma anotação referente à OS, como por exemplo:
+
+> "Solicitada compra da tela para substituição"
+
+essa mensagem deverá ser vinculada à OS, contendo:
+
+* Mensagem
+* Data e hora do comentário
+
+---
+
+## Finalização da OS
+
+Quando o equipamento estiver pronto, a OS deverá receber o status:
+
+* `FINALIZADA`
+
+Também deverá ser registrada a data e hora do fechamento.
+
+---
+
+## Cancelamento da OS
+
+Caso o cliente opte por não realizar o serviço, a OS deverá receber o status:
+
+* `CANCELADA`
+
+Também deverá ser registrada a data e hora do cancelamento.
+
+---
+
+# Funcionalidades da API
+
+## Clientes
+
+A API deverá permitir:
+
+* CRUD de clientes
+* Listar todos os clientes
+* Listar cliente por ID
+* Listar cliente por email
+* Listar cliente por telefone
+
+---
+
+## Ordem de Serviço
+
+A API deverá permitir:
+
+* CRUD de Ordem de Serviço
+* Listar uma OS por ID
+* Listar todas as OS por ID do cliente
+
+---
+
+## Comentários
+
+A API deverá permitir:
+
+* CRUD de comentários
+* Listar comentário por ID
+* Listar comentários por OS
+
+---
+
+# Desafio
+
+Implemente as seguintes funcionalidades:
+
+* Listar todas as OS abertas por ID do cliente
+* Listar todas as OS fechadas por ID do cliente
+* Listar todas as OS com e sem comentários
+* Listar todas as OS abertas com e sem comentários
+* Listar todas as OS fechadas com e sem comentários
