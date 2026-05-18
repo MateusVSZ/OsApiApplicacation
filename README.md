@@ -1,8 +1,8 @@
 # Ordem de Serviço API
 
-Você foi recrutado pela equipe de TI para desenvolver o sistema de Ordem de Serviço para uma Assistência Técnica de Notebooks e equipamentos de informática em geral.
+Precisei desenvolver o sistema de Ordem de Serviço para uma Assistência Técnica de Notebooks e equipamentos de informática em geral.
 
-A sua responsabilidade é preparar o Back-End utilizando frameworks de mercado e as boas práticas de programação, incluindo Clean Code.
+Preparando o Back-End utilizando frameworks de mercado e as boas práticas de programação, incluindo Clean Code.
 
 ## Regras de Negócio
 
