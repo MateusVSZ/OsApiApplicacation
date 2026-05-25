@@ -18,6 +18,9 @@ import br.eti.mts.OSApiApplication.domain.repository.ComentarioRepository;
 import br.eti.mts.OSApiApplication.domain.repository.OrdemServicoRepository;
 import br.eti.mts.OSApiApplication.domain.service.ComentarioService;
 import br.eti.mts.OSApiApplication.domain.service.OrdemServicoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -25,6 +28,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 
@@ -42,6 +46,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author digma
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/ordem-servico")
 public class OrdemServicoController {
@@ -53,44 +58,41 @@ public class OrdemServicoController {
 
     @Autowired
     private ClienteRepository clienteRepository;
- 
+
     @Autowired
     private ComentarioRepository comentarioRepository;
-    
+
     @Autowired
     private ComentarioService comentarioService;
-  
+
     /**
-     * Retorna todas as OS
-     * Com Cliente
-     * Com Comentarios
-     * @return 
+     * Retorna todas as OS Com Cliente Com Comentarios
+     *
+     * @return
      */
+    @Operation(summary = "Busca todas as ordens de serviço")
+
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved")
+
+    })
     @GetMapping
     public List<OrdemServico> findAll() {
         return ordemServicoService.findAll();
     }
 
-    
     /**
      * Retorna todas as OS POR Cliente
-     * 
+     *
      * @param clienteId
-     * @return 
+     * @return
      */
-    @GetMapping("/{clienteId}") //ordem de serviço por Id
-    public ResponseEntity<OrdemServico> busca(@PathVariable Long clienteId) {
+    @Operation(summary = "Busca todas as ordens de serviço por ID do cliente")
 
-        Optional<OrdemServico> cliente = ordemServicoRepository.findById(clienteId);
-        if (cliente.isPresent()) {
-            return ResponseEntity.ok(cliente.get());
-
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-
-    }
-
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+        @ApiResponse(responseCode = "400", description = "Not found 404  - ID do cliente não encontrado")
+    })
     @GetMapping("/clientes/{clienteId}") //busca todas as ordens de servico por clienteId
     public List<OrdemServico> buscaOS(@PathVariable Long clienteId) {
         Optional<Cliente> cliente = clienteRepository.findById(clienteId);
@@ -99,17 +101,22 @@ public class OrdemServicoController {
 
     }
 
-   
-    
+    @Operation(summary = "Cria uma ordem de serviço")
 
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully create"),})
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public OrdemServico criar(@RequestBody OrdemServico ordemServico) {
         return ordemServicoService.criar(ordemServico);
 
     }
-    
 
+    @Operation(summary = "Atualiza uma ordem de serviço por ID ")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+        @ApiResponse(responseCode = "400", description = "Not found 404 - Não foi encontrado o ID da ordem de serviço")
+    })
     @PutMapping("/{ordemServicoID}")
     public ResponseEntity<OrdemServico> atualizar(@RequestBody OrdemServico ordemServico, @PathVariable Long ordemServicoID) {
         if (!ordemServicoRepository.existsById(ordemServicoID)) {
@@ -122,6 +129,11 @@ public class OrdemServicoController {
 
     }
 
+    @Operation(summary = "Atualizar status por ID da ordem de serviço")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Sucesso"),
+        @ApiResponse(responseCode = "400", description = " Not found 404 - Não foi encontrado o ID da ordem de serviço")
+    })
     @PutMapping("/atualiza-status/{ordemServicoID}")
     public ResponseEntity<OrdemServico> atualizaStatus(
             @PathVariable Long ordemServicoID,
@@ -135,7 +147,11 @@ public class OrdemServicoController {
             return ResponseEntity.notFound().build();
         }
     }
-
+    @Operation(summary = "Apaga uma ordem de serviço por ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+        @ApiResponse(responseCode = "400", description = "Not found 404 - Não foi encontrado o ID da ordem de servico")
+    })
     @DeleteMapping("/{ordemServicoID}")
     public void delete(@RequestBody OrdemServico ordemServico, @PathVariable Long ordemServicoID, Long comentarioId) {
         if (ordemServicoRepository.existsById(ordemServicoID)) {

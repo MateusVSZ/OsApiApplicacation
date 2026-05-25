@@ -7,6 +7,9 @@ package br.eti.mts.OSApiApplication.api.controller;
 import br.eti.mts.OSApiApplication.domain.model.Cliente;
 import br.eti.mts.OSApiApplication.domain.repository.ClienteRepository;
 import br.eti.mts.OSApiApplication.domain.service.ClienteService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.Valid;
@@ -17,6 +20,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author digma
  */
+@CrossOrigin
 @RestController
 public class ClienteController {
 
@@ -39,14 +44,24 @@ public class ClienteController {
     private ClienteService clienteService;
 
     List<Cliente> listaClientes; //criei um objeto
-
+    
+    @Operation(summary = "Busca todos os clientes")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+        @ApiResponse(responseCode = "400", description = "Not found 404 - Não foi encontrado o ID do cliente")
+    })
     @GetMapping("/clientes")
     public List<Cliente> listas() { //aqui criei um método que retorna lista<Cliente>
 
         return clienteService.findAll(); // é tudo
 
     }
-
+    
+    @Operation(summary = "Busca o cliente por ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+        @ApiResponse(responseCode = "400", description = "Not found 404 - Não foi encontrado o ID do cliente")
+    })
     @GetMapping("/clientes/{clienteID}")
     public ResponseEntity<Cliente> buscar(@PathVariable Long clienteID) {// Long com L maiusculo é que clienteId não pode receber valor nulo
         Optional<Cliente> cliente = clienteRepository.findById(clienteID); //pode ou não estar nulo
@@ -60,13 +75,23 @@ public class ClienteController {
         }
     }
 
+    @Operation(summary = "Cria um cliente")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+
+    })
     @PostMapping("/clientes")
     @ResponseStatus(HttpStatus.CREATED)
     public Cliente adicionar(@Valid @RequestBody Cliente cliente) {
         return clienteService.salvar(cliente);
 
     }
-
+    
+    @Operation(summary = "Atualiza o cliente por ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+        @ApiResponse(responseCode = "400", description = "Not found 404 - Não foi encontrado o ID do cliente")
+    })
     @PutMapping("clientes/{clienteID}")
     public ResponseEntity<Cliente> atualizar(@Valid @PathVariable Long clienteID, @RequestBody Cliente cliente) {
 
